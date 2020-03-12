@@ -29,6 +29,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
+                app:imageUrlOfDay="@{viewModel.imageOfTheDay}"
                 android:contentDescription="@string/image_of_the_day"
                 app:srcCompat="@drawable/placeholder_picture_of_day" />
 

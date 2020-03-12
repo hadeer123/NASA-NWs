@@ -6,12 +6,13 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonObject
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.api.NasaApi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.udacity.asteroidradar.api.NetworkUtils
+import kotlinx.coroutines.*
+import org.json.JSONObject
+import retrofit2.Response
 import java.time.LocalDate
 
 enum class NASAApiStatus { LOADING, ERROR, DONE }
@@ -19,6 +20,9 @@ enum class NASAApiStatus { LOADING, ERROR, DONE }
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _asteroids = MutableLiveData<List<Asteroid>>()
+
+    val imageOfTheDay: String
+        get() = NasaApi.IMAGE_URL
 
     val asteroids: LiveData<List<Asteroid>>
         get() = _asteroids
@@ -28,7 +32,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     val status: LiveData<NASAApiStatus>
         get() = _status
-
 
     private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid>()
 
@@ -66,15 +69,28 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 _status.value = NASAApiStatus.LOADING
                 // this will run on a thread managed by Retrofit
-                val responseBody = getAsteroidDefferd.await()
-                val responseBodys = responseBody.toString()
-                _status.value = NASAApiStatus.DONE
-//                NetworkUtils().parseAsteroidsJsonResult()
-//                _asteroids.value = listResult
+                onSuccess(getAsteroidDefferd)
             } catch (e: Exception) {
-                _status.value = NASAApiStatus.ERROR
-                _asteroids.value = ArrayList()
+                onFailure()
             }
         }
+    }
+
+    private suspend fun onSuccess(getAsteroidDefferd: Deferred<Response<JsonObject>>) {
+
+        // had to use Json from GSON instead of a JSONObject because I couldn't get it to work.
+        val responseBody = getAsteroidDefferd.await()
+        val body = responseBody.body().toString()
+        val jsonObject = JSONObject(body)
+
+        _status.value = NASAApiStatus.DONE
+
+        val listResult = jsonObject.let { NetworkUtils().parseAsteroidsJsonResult(it) }
+        _asteroids.value = listResult
+    }
+
+    private fun onFailure() {
+        _status.value = NASAApiStatus.ERROR
+        _asteroids.value = ArrayList()
     }
 }

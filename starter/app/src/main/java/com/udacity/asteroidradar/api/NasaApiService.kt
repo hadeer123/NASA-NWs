@@ -16,7 +16,7 @@ import retrofit2.http.Query
 
 
 private const val BASE_URL = "https://api.nasa.gov/neo/rest/v1/"
-private const val IMAGE_URL = "https://api.nasa.gov/planetary/apod?api_key=${BuildConfig.API_KEY}"
+
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -41,13 +41,12 @@ interface NasaApiService {
         @Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query(
             "api_key"
         ) api_key: String = BuildConfig.API_KEY
-    ):
-            Deferred<Response<JsonObject>>
+    ): Deferred<Response<JsonObject>>
 }
 
 object NasaApi {
     val retofitService: NasaApiService by lazy {
         retrofit.create((NasaApiService::class.java))
     }
-
+    const val IMAGE_URL = "https://api.nasa.gov/planetary/apod?api_key=${BuildConfig.API_KEY}"
 }
