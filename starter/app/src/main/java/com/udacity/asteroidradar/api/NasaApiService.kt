@@ -11,23 +11,25 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-private const val BASE_URL = "https://api.nasa.gov/neo/rest/v1/"
+private const val BASE_URL = "https://api.nasa.gov/"
+// for debugging
+private val interceptor = HttpLoggingInterceptor().apply {
+    this.level = HttpLoggingInterceptor.Level.HEADERS
+}
 
+val client: OkHttpClient = OkHttpClient.Builder().apply {
+    this.addInterceptor(interceptor)
+}.build()
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-private val interceptor = HttpLoggingInterceptor().apply {
-    this.level = HttpLoggingInterceptor.Level.HEADERS
-}
-val client: OkHttpClient = OkHttpClient.Builder().apply {
-    this.addInterceptor(interceptor)
-}.build()
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
@@ -35,8 +37,14 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
+private val retrofitMoshi = Retrofit.Builder()
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .client(client)
+    .baseUrl(BASE_URL)
+    .build()
 interface NasaApiService {
-    @GET("feed?")
+    @GET("neo/rest/v1/feed?")
     fun getAsteroids(
         @Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query(
             "api_key"
@@ -44,9 +52,17 @@ interface NasaApiService {
     ): Deferred<Response<JsonObject>>
 }
 
+interface NasaImageService {
+    @GET("planetary/apod?")
+    fun getImageOfTheDay(@Query("api_key") api_key: String = BuildConfig.API_KEY): Deferred<PictureOfTheDay>
+}
+
 object NasaApi {
     val retofitService: NasaApiService by lazy {
         retrofit.create((NasaApiService::class.java))
     }
-    const val IMAGE_URL = "https://api.nasa.gov/planetary/apod?api_key=${BuildConfig.API_KEY}"
+
+    val retrofitServiceMoshi: NasaImageService by lazy {
+        retrofitMoshi.create(NasaImageService::class.java)
+    }
 }

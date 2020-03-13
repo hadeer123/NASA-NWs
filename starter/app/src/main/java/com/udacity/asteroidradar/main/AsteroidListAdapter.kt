@@ -13,9 +13,13 @@ class AsteroidListAdapter(val onClickListener: OnClickListener) :
 
     class AsteroidViewHolder(private var binding: ListAstroidItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(asteroidItem: Asteroid) {
+        fun bind(
+            asteroidItem: Asteroid,
+            onClickListener: OnClickListener
+        ) {
             binding.asteroid = asteroidItem
             binding.executePendingBindings()
+            binding.clickListener = onClickListener
         }
     }
 
@@ -39,10 +43,7 @@ class AsteroidListAdapter(val onClickListener: OnClickListener) :
 
     override fun onBindViewHolder(holder: AsteroidViewHolder, position: Int) {
         val asteroid = getItem(position)
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(asteroid)
-        }
-        holder.bind(asteroid)
+        holder.bind(asteroid, onClickListener)
     }
 
     class OnClickListener(val clickListener: (asteroid: Asteroid) -> Unit) {

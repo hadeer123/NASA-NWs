@@ -10,27 +10,27 @@ import com.google.gson.JsonObject
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.api.NasaApi
 import com.udacity.asteroidradar.api.NetworkUtils
+import com.udacity.asteroidradar.api.PictureOfTheDay
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import retrofit2.Response
 import java.time.LocalDate
 
-enum class NASAApiStatus { LOADING, ERROR, DONE }
+enum class NASAapiStatus { LOADING, ERROR, DONE }
 @RequiresApi(Build.VERSION_CODES.O)
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
+    private val _imageOfTheDay = MutableLiveData<PictureOfTheDay>()
+    val imageOfTheDay: LiveData<PictureOfTheDay>
+        get() = _imageOfTheDay
+
+
     private val _asteroids = MutableLiveData<List<Asteroid>>()
-
-    val imageOfTheDay: String
-        get() = NasaApi.IMAGE_URL
-
     val asteroids: LiveData<List<Asteroid>>
         get() = _asteroids
 
-    private val _status = MutableLiveData<NASAApiStatus>()
-
-
-    val status: LiveData<NASAApiStatus>
+    private val _status = MutableLiveData<NASAapiStatus>()
+    val status: LiveData<NASAapiStatus>
         get() = _status
 
     private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid>()
@@ -51,9 +51,32 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     init {
+        getImageOfTheDay()
         getAsteroids()
+    }
+
+    private fun getImageOfTheDay() {
+        coroutineScope.launch {
+            var getImageOfDayDeffered = NasaApi.retrofitServiceMoshi.getImageOfTheDay()
+            try {
+                _status.value = NASAapiStatus.LOADING
+                pictureOfTheDayOnSuccess(getImageOfDayDeffered)
+            } catch (e: Exception) {
+                pictureOfTheDayOnFailure()
+            }
+        }
+    }
+
+    private fun pictureOfTheDayOnFailure() {
+        _status.value = NASAapiStatus.ERROR
+        _imageOfTheDay.value = null
+    }
+
+    private suspend fun pictureOfTheDayOnSuccess(getImageDeferred: Deferred<PictureOfTheDay>) {
+        val imageOfTheDay = getImageDeferred.await()
+        _status.value = NASAapiStatus.DONE
+        _imageOfTheDay.value = imageOfTheDay
     }
 
 
@@ -67,30 +90,29 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 endDate = endDate.toString()
             )
             try {
-                _status.value = NASAApiStatus.LOADING
+                _status.value = NASAapiStatus.LOADING
                 // this will run on a thread managed by Retrofit
-                onSuccess(getAsteroidDefferd)
+                asteroidsFetchOnSuccess(getAsteroidDefferd)
             } catch (e: Exception) {
-                onFailure()
+                asteroidsOnFailure()
             }
         }
     }
 
-    private suspend fun onSuccess(getAsteroidDefferd: Deferred<Response<JsonObject>>) {
-
-        // had to use Json from GSON instead of a JSONObject because I couldn't get it to work.
+    private suspend fun asteroidsFetchOnSuccess(getAsteroidDefferd: Deferred<Response<JsonObject>>) {
+        //TODO I used GSON because I couldnt figure out how to use NetworkUtil directly Please advise
         val responseBody = getAsteroidDefferd.await()
         val body = responseBody.body().toString()
         val jsonObject = JSONObject(body)
 
-        _status.value = NASAApiStatus.DONE
+        _status.value = NASAapiStatus.DONE
 
         val listResult = jsonObject.let { NetworkUtils().parseAsteroidsJsonResult(it) }
         _asteroids.value = listResult
     }
 
-    private fun onFailure() {
-        _status.value = NASAApiStatus.ERROR
+    private fun asteroidsOnFailure() {
+        _status.value = NASAapiStatus.ERROR
         _asteroids.value = ArrayList()
     }
 }

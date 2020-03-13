@@ -8,9 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.main.AsteroidListAdapter
 
-
-//TODO binder for loading
-
 @BindingAdapter("imageUrlOfDay")
 fun bindImage(imageView: ImageView, imgUrl: String?) {
     imgUrl?.let {
