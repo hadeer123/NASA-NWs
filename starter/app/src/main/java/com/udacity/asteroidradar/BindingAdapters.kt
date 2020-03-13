@@ -6,6 +6,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.udacity.asteroidradar.api.Asteroid
 import com.udacity.asteroidradar.main.AsteroidListAdapter
 
 @BindingAdapter("imageUrlOfDay")

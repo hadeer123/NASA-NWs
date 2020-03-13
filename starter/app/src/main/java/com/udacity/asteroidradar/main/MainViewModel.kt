@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonObject
-import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.api.Asteroid
 import com.udacity.asteroidradar.api.NasaApi
 import com.udacity.asteroidradar.api.NetworkUtils
 import com.udacity.asteroidradar.api.PictureOfTheDay
@@ -58,7 +58,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun getImageOfTheDay() {
         coroutineScope.launch {
-            var getImageOfDayDeffered = NasaApi.retrofitServiceMoshi.getImageOfTheDay()
+            val getImageOfDayDeffered = NasaApi.retrofitServiceMoshi.getImageOfTheDay()
             try {
                 _status.value = NASAapiStatus.LOADING
                 pictureOfTheDayOnSuccess(getImageOfDayDeffered)
@@ -85,7 +85,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             val dateNow = LocalDate.now()
             val endDate = LocalDate.now().plusDays(7)
 
-            var getAsteroidDefferd = NasaApi.retofitService.getAsteroids(
+            val getAsteroidDefferd = NasaApi.retrofitService.getAsteroids(
                 startDate = dateNow.toString(),
                 endDate = endDate.toString()
             )

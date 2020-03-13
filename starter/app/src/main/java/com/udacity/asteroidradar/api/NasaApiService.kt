@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.BuildConfig
+import com.udacity.asteroidradar.Constants
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,8 +16,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
-private const val BASE_URL = "https://api.nasa.gov/"
 // for debugging
 private val interceptor = HttpLoggingInterceptor().apply {
     this.level = HttpLoggingInterceptor.Level.HEADERS
@@ -30,19 +29,23 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
+
+//TODO had to do that because moshi doesnt work with GSON - Help?
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .client(client)
-    .baseUrl(BASE_URL)
+    .baseUrl(Constants.BASE_URL)
     .build()
 
 private val retrofitMoshi = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .client(client)
-    .baseUrl(BASE_URL)
+    .baseUrl(Constants.BASE_URL)
     .build()
+
+
 interface NasaApiService {
     @GET("neo/rest/v1/feed?")
     fun getAsteroids(
@@ -58,7 +61,7 @@ interface NasaImageService {
 }
 
 object NasaApi {
-    val retofitService: NasaApiService by lazy {
+    val retrofitService: NasaApiService by lazy {
         retrofit.create((NasaApiService::class.java))
     }
 
