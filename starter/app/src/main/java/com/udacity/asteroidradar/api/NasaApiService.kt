@@ -51,6 +51,7 @@ interface NasaApiService {
     fun getAsteroids(
         @Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query(
             "api_key"
+
         ) api_key: String = BuildConfig.API_KEY
     ): Deferred<Response<JsonObject>>
 }

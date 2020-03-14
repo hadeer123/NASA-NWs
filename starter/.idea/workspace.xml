@@ -7,14 +7,12 @@
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Firebase" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e04b9d2d-c467-49eb-83d6-689817f7e195" name="Default Changelist" comment="adding database">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/DataTransferObjects.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/database/DatabaseAsteroid.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/database/Room.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/repository/AsteroidRepository.kt" afterDir="false" />
+    <list default="true" id="e04b9d2d-c467-49eb-83d6-689817f7e195" name="Default Changelist" comment="database working. also added worker (Caching done)">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/AsteroidRadarApplication.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/work/RefreshDataWork.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" afterDir="false" />
@@ -26,16 +24,24 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/Asteroid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/Asteroid.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/BindingAdapters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/BindingAdapters.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/PictureOfDay.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/models/PictureOfDay.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/Asteroid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/models/Asteroid.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/DataTransferObjects.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/DataTransferObjects.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/NasaApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/NasaApiService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/NetworkUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/NetworkUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/database/DatabaseAsteroid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/database/DatabaseAsteroid.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/AsteroidListAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/AsteroidListAdapter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/MainViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/repository/AsteroidRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/repository/AsteroidRepository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_detail.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_astroid_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_astroid_item.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/main_nav_graph.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/main_nav_graph.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -84,6 +90,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.udacity.asteroidradar.models" />
       <recent name="com.udacity.asteroidradar.api" />
     </key>
   </component>
@@ -198,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584072115600</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="adding database">
+      <created>1584113105894</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1584113105894</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="UpdateCopyrightCheckinHandler">
@@ -224,7 +238,8 @@
     <MESSAGE value="so far" />
     <MESSAGE value="working !!! Caching is missing" />
     <MESSAGE value="adding database" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding database" />
+    <MESSAGE value="database working. also added worker (Caching done)" />
+    <option name="LAST_COMMIT_MESSAGE" value="database working. also added worker (Caching done)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -232,27 +247,22 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-field">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/Asteroid.kt</url>
+        <line-breakpoint type="kotlin-field">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/models/Asteroid.kt</url>
           <line>8</line>
           <properties myFieldName="id" myClassName="com.udacity.asteroidradar.api.Asteroid" />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/MainFragment.kt</url>
-          <line>29</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/MainFragment.kt</url>
-          <line>34</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-function">
+        <line-breakpoint type="kotlin-function">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/main/AsteroidListAdapter.kt</url>
           <line>49</line>
           <properties class="com.udacity.asteroidradar.main.AsteroidListAdapter.OnClickListener" method="onClick" />
           <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/udacity/asteroidradar/api/NasaApiService.kt</url>
+          <line>55</line>
+          <option name="timeStamp" value="49" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
