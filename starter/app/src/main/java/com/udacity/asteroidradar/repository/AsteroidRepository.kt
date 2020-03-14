@@ -4,6 +4,7 @@ package com.udacity.asteroidradar.repository
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.gson.JsonObject
 import com.udacity.asteroidradar.api.*
@@ -20,6 +21,11 @@ import java.time.LocalDate
 enum class NasaApiStatus { LOADING, ERROR, DONE }
 @RequiresApi(Build.VERSION_CODES.O)
 class AsteroidRepository(private val database: AsteroidDatabase) {
+
+    val _status = MutableLiveData<NasaApiStatus>()
+    val status : LiveData<NasaApiStatus>
+        get() =_status
+
     val asteroids: LiveData<List<Asteroid>> =
         Transformations.map(database.asteroidDao.getAsteroids()) {
             it.asDomainModel()
@@ -45,6 +51,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     private suspend fun getAsteroids(): List<Asteroid> {
         val dateNow = LocalDate.now().toString()
         val endDate = LocalDate.now().plusDays(7).toString()
+        _status.value = NasaApiStatus.LOADING
         try {
             return asteroidsFetchOnSuccess(
                 NasaApi.retrofitService.getAsteroids(
@@ -62,11 +69,12 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         val responseBody = getAsteroidDefferd.await()
         val body = responseBody.body().toString()
         val jsonObject = JSONObject(body)
-
+        _status.value = NasaApiStatus.DONE
         return jsonObject.let { NetworkUtils().parseAsteroidsJsonResult(it) }
     }
 
     private fun asteroidsOnFailure(): List<Asteroid> {
+        _status.value = NasaApiStatus.ERROR
         return ArrayList()
     }
 }

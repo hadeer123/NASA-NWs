@@ -44,7 +44,7 @@ class AsteroidRadarApplication : Application() {
 
         WorkManager.getInstance().enqueueUniquePeriodicWork(
             RefreshDataWork.WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             repeatingRequest
         )
     }

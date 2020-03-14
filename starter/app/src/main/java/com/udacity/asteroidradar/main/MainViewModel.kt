@@ -48,6 +48,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val imageOfTheDay: LiveData<PictureOfTheDay>
         get() = _imageOfTheDay
 
+    val status = asteroidRepository.status
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
