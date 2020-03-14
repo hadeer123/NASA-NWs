@@ -42,8 +42,12 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     suspend fun getImageOfTheDay(): PictureOfTheDay? {
         val getImageOfDayDeffered = NasaApi.retrofitServiceMoshi.getImageOfTheDay()
         try {
-            return getImageOfDayDeffered.await()
+            _status.postValue(NasaApiStatus.LOADING)
+            val img = getImageOfDayDeffered.await()
+            _status.postValue(NasaApiStatus.DONE)
+            return img
         } catch (e: Exception) {
+            _status.postValue(NasaApiStatus.LOADING)
             return null
         }
     }
@@ -51,7 +55,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     private suspend fun getAsteroids(): List<Asteroid> {
         val dateNow = LocalDate.now().toString()
         val endDate = LocalDate.now().plusDays(7).toString()
-        _status.value = NasaApiStatus.LOADING
+        _status.postValue(NasaApiStatus.LOADING)
         try {
             return asteroidsFetchOnSuccess(
                 NasaApi.retrofitService.getAsteroids(
@@ -69,12 +73,12 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         val responseBody = getAsteroidDefferd.await()
         val body = responseBody.body().toString()
         val jsonObject = JSONObject(body)
-        _status.value = NasaApiStatus.DONE
+        _status.postValue(NasaApiStatus.DONE)
         return jsonObject.let { NetworkUtils().parseAsteroidsJsonResult(it) }
     }
 
     private fun asteroidsOnFailure(): List<Asteroid> {
-        _status.value = NasaApiStatus.ERROR
+        _status.postValue(NasaApiStatus.ERROR)
         return ArrayList()
     }
 }
